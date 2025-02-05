@@ -10,7 +10,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
   const [loading, setLoading] = useState(false);
   let user = localStorage.getItem("user");
   user = JSON.parse(user);
-  const isMobile = window.matchMedia("(max-width: 768px)").matches;
+  const isMobile = window.matchMedia("(max-width: 1024px)").matches;
   console.log(isMobile ? "📱 Mobile/Tablet detected" : "🖥️ Desktop detected");
   const MAX_CHUNK_SIZE = 512;
   const formatCurrency = (amount) => {
