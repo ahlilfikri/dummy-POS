@@ -411,7 +411,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
                 </button>
               ) : (
                 <button
-                  className={`px-4 py-2 rounded-md w-full flex items-center justify-center ${isBluetoothAvailable ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-500 cursor-not-allowed"
+                  className={`px-4 py-2 rounded-md w-full flex items-center justify-center ${(isBluetoothAvailable || !isBluetoothAvailable) ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-500 cursor-not-allowed"
                     }`}
                   onClick={isBluetoothAvailable ? connectToPrinter : null}
                   disabled={!isBluetoothAvailable || loading}
