@@ -281,10 +281,6 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
       }
       alert(`✅ Struk berhasil dicetak!`);
       console.log("✅ Struk berhasil dicetak!");
-      selectedDevice.addEventListener("gattserverdisconnected", () => {
-        console.warn("⚠ Printer terputus! Silakan hubungkan kembali.");
-        disconnectPrinter();
-      });
     } catch (error) {
       console.error("❌ Gagal mencetak struk:", error);
       alert("Gagal mencetak struk! Coba periksa koneksi printer.");
