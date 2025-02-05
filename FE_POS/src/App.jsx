@@ -6,7 +6,7 @@ import Cashier from "./cashier/page/Cashier.jsx";
 import OrderHistory from "./cashier/page/OrderHistory.jsx";
 import Item from "./logistik/page/Item.jsx";
 import Material from "./logistik/page/Material.jsx";
-import Category from "./logistik/page/category.jsx";
+import Category from "./logistik/page/Category.jsx";
 import Transaction from "./admin/page/Transaction.jsx";
 import User from "./admin/page/User.jsx";
 import SalesCart from "./admin/page/SalesCart.jsx";
