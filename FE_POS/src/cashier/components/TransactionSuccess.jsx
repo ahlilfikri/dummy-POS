@@ -50,20 +50,33 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
   }, []);
 
   // 🔥 Fungsi untuk disconnect jika Bluetooth mati
-  const disconnectPrinter = () => {
+  const disconnectPrinter = async () => {
     if (device) {
       try {
-        device.gatt.disconnect();
-        setPrinter(null);
-        console.warn("Printer berhasil terputus.");
+        if (device.gatt.connected) {
+          await device.gatt.disconnect();
+          console.warn("Printer berhasil terputus.");
+        }
       } catch (error) {
-        console.warn("Printer sudah terputus atau tidak bisa diputuskan secara manual.");
+        console.warn("Gagal memutuskan printer:", error);
       }
     }
+
+    // Reset semua state
     setPrinter(null);
     setDevice(null);
     setIsConnected(false);
     setIsBluetoothAvailable(false);
+
+    try {
+      // Meminta ulang daftar perangkat, sehingga melupakan perangkat sebelumnya
+      await navigator.bluetooth.requestDevice({
+        acceptAllDevices: true,
+        optionalServices: ["000018f0-0000-1000-8000-00805f9b34fb"],
+      });
+    } catch (error) {
+      console.warn("Tidak ada perangkat baru yang dipilih, perangkat lama tetap dilupakan.");
+    }
   };
 
   // 🔥 Fungsi untuk connect ke printer (Manual)
@@ -102,7 +115,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
       setDevice(selectedDevice);
 
       console.log();
-      
+
 
       // 🔥 Jika printer terputus, ubah status jadi tidak terhubung
       selectedDevice.addEventListener("gattserverdisconnected", () => {
