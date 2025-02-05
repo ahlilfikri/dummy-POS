@@ -10,6 +10,8 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
   const [loading, setLoading] = useState(false);
   let user = localStorage.getItem("user");
   user = JSON.parse(user);
+  const MAX_CHUNK_SIZE = 512;
+  
   const formatCurrency = (amount) => {
     return `Rp ${amount.toLocaleString("id-ID")}`;
   };
@@ -93,7 +95,6 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
     if (!isMobile){
 
     }
-    const MAX_CHUNK_SIZE = 512;
     let Bayar = parseFloat(transactionDetails?.uangMasuk);
     const ESC = "\x1B"; // ESC command
     const GS = "\x1D"; // GS command
