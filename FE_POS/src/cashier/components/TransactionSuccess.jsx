@@ -95,12 +95,9 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
     const GS = "\x1D"; // GS command
     const logoData = [
     ];
-
     try {
       console.log("🔄 Mengirim logo ke printer...");
-
       let receiptData;
-
       if (isMobile) {
         if (transactionDetails?.uangMasuk || transactionDetails?.uangMasuk != "" || transactionDetails?.uangKembalian != 0) {
           let receiptData = `PENYETAN NOROYONO\n`;
@@ -245,10 +242,10 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
   };
 
   const writeToPrinterInChunksMobile = async (data, printer) => {
-    const lines = data.split("\n"); // Pisahkan data per baris
+    const lines = data?.split("\n"); // Pisahkan data per baris
 
     for (const line of lines) {
-      const asciiArray = line.split("").map(char => char.charCodeAt(0)); // Konversi ke ASCII
+      const asciiArray = line?.split("").map(char => char.charCodeAt(0)); // Konversi ke ASCII
       const encodedData = new Uint8Array([...asciiArray, 0x0A]); // Tambahkan newline (0x0A)
 
       await printer.writeValue(encodedData); // Kirim ke printer
