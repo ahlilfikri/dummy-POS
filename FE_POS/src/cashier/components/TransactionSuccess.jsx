@@ -91,6 +91,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
       alert("Printer belum terhubung!");
       return;
     }
+    let Bayar = parseFloat(transactionDetails?.uangMasuk);
     const ESC = "\x1B"; // ESC command
     const GS = "\x1D"; // GS command
     const logoData = [
@@ -123,7 +124,6 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
           receiptData += `\n================================\n`;
           receiptData += `Total Items : ${transactionDetails?.items?.length}\n`;
           receiptData += `Total Bayar : ${formatCurrency(transactionDetails?.total)}\n`;
-          receiptData += `Bayar       : ${formatCurrency(parseFloat(transactionDetails?.uangMasuk))}\n`;
           receiptData += `Kembalian   : ${formatCurrency(transactionDetails?.uangKembalian)}\n`;
           receiptData += `\nTerima kasih telah berbelanja!\n`;
           receiptData += `================================\n\n\n\n`;
