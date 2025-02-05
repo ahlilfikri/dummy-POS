@@ -223,6 +223,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
       }
 
       if (transactionDetails?.uangMasuk || transactionDetails?.uangMasuk != "") {
+        alert(`✅ Open Cash Drawer!`);
         await openCashDrawer();
       }
       alert(`✅ Struk berhasil dicetak!`);
