@@ -1,0 +1,74 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .inter {
+    font-family: "Inter", sans-serif;
+  }
+
+  body {
+    font-family: "Open Sans", sans-serif;
+  }
+}
+
+.carousel .control-dots {
+  display: flex;
+  justify-content: space-between; /* Space dots evenly */
+  width: 100%;
+  position: absolute !important;
+  bottom: 0px !important; /* Adjust the distance of dots from the bottom */
+  pointer-events: all; /* Ensure dots can be interacted with */
+}
+
+.carousel .control-dots .dot {
+  flex-grow: 1;
+  height: 5px;
+  margin: 0 !important;
+  background-color: #7c7c7c !important;
+  border-radius: 0 !important;
+  transition: background-color 0.3s ease;
+}
+
+.carousel .control-dots .dot.selected {
+  background-color: #000 !important;
+  border-radius: 10px !important;
+}
+
+.gradient-menu-sidebar {
+  font-size: px;
+  background: -webkit-linear-gradient(180deg, #FF9A00 0%, #FF0000 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.line-dashed {
+  height: 1px;
+  margin: 10px 0px 0 0;
+  background: repeating-linear-gradient(to right,#282828 0,#282828 6px,transparent 6px,transparent 14px)
+}
+
+.custom-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #3D3D3D rgba(0, 0, 0, 0.1);
+}
+
+.custom-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: #3D3D3D;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: #3D3D3D;
+  border-radius: 10px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: #3D3D3D;
+}
+

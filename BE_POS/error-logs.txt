@@ -1,0 +1,25 @@
+2025-01-31T10:10:18.585Z - POST - /be/api/pos/transaction/reduce/material - 200 - reduceMaterials is not defined
+2025-01-31T10:14:34.545Z - POST - /be/api/pos/transaction/create/transaction - 200 - namaPemesan is not defined
+2025-01-31T10:18:16.263Z - POST - /be/api/pos/transaction/create/transaction - 200 - transaction validation failed: item.0.namaItem: Path `namaItem` is required., item.0.nama: Path `nama` is required., item.1.namaItem: Path `namaItem` is required., item.1.nama: Path `nama` is required.
+2025-01-31T10:19:07.598Z - POST - /be/api/pos/transaction/create/transaction - 200 - transaction validation failed: item.0.namaItem: Path `namaItem` is required., item.0.nama: Path `nama` is required., item.1.namaItem: Path `namaItem` is required., item.1.nama: Path `nama` is required.
+2025-01-31T11:52:52.537Z - POST - /be/api/pos/item - 200 - unitPerMaterial harus diisi untuk material Bawang Putih
+2025-02-01T05:05:07.469Z - GET - /be/api/pos/transaction?page=1 - 200 - connect ETIMEDOUT 52.77.35.125:27017
+2025-02-01T05:05:25.902Z - GET - /be/api/pos/category - 200 - connect ETIMEDOUT 52.77.35.125:27017
+2025-02-01T05:05:27.468Z - GET - /be/api/pos/transaction?page=1 - 200 - connect ETIMEDOUT 52.77.35.125:27017
+2025-02-01T05:05:45.931Z - GET - /be/api/pos/category - 200 - connect ETIMEDOUT 52.77.35.125:27017
+2025-02-01T08:11:27.836Z - PUT - /be/api/pos/transaction/undefined - 200 - Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "transaction"
+2025-02-01T08:45:53.441Z - PUT - /be/api/pos/transaction/undefined - 200 - Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "transaction"
+2025-02-01T09:00:48.039Z - DELETE - /be/api/pos/transaction/null - 200 - Cast to ObjectId failed for value "null" (type string) at path "_id" for model "transaction"
+2025-02-02T19:40:51.269Z - GET - /be/api/pos/oprational?page=1&search= - 200 - Schema hasn't been registered for model "user".
+Use mongoose.model(name, schema)
+2025-02-02T20:04:35.647Z - DELETE - /be/api/pos/oprational/679fcaa2aeb2abf1baeb7828 - 200 - oprational.remove is not a function
+2025-02-02T20:04:48.027Z - DELETE - /be/api/pos/oprational/679fcaa2aeb2abf1baeb7828 - 200 - oprational.remove is not a function
+2025-02-02T20:05:53.239Z - DELETE - /be/api/pos/oprational/679fcaa2aeb2abf1baeb7828 - 200 - oprational.delete is not a function
+2025-02-02T21:32:45.389Z - GET - /be/api/pos/oprational/ - 200 - Cannot destructure property 'id' of 'req.user' as it is undefined.
+2025-02-02T21:32:47.363Z - GET - /be/api/pos/oprational/?page=1&search= - 200 - Cannot destructure property 'id' of 'req.user' as it is undefined.
+2025-02-02T21:32:54.426Z - GET - /be/api/pos/oprational/n - 200 - Cast to ObjectId failed for value "n" (type string) at path "_id" for model "oprasional"
+2025-02-02T21:32:55.365Z - GET - /be/api/pos/oprational/?page=1&search= - 200 - Cannot destructure property 'id' of 'req.user' as it is undefined.
+2025-02-02T21:32:59.952Z - GET - /be/api/pos/oprational/?page=1&search= - 200 - Cannot destructure property 'id' of 'req.user' as it is undefined.
+2025-02-02T21:32:59.961Z - GET - /be/api/pos/oprational/?page=1&search= - 200 - Cannot destructure property 'id' of 'req.user' as it is undefined.
+2025-02-03T16:22:14.602Z - GET - /be/api/pos/category - 200 - Operation `categories.countDocuments()` buffering timed out after 10000ms
+2025-02-03T16:22:24.611Z - GET - /be/api/pos/category - 200 - Operation `categories.countDocuments()` buffering timed out after 10000ms
