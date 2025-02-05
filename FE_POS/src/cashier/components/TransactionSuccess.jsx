@@ -8,10 +8,12 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [device, setDevice] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isBluetoothAvailable, setIsBluetoothAvailable] = useState(true); // State Bluetooth
+
   let user = localStorage.getItem("user");
   user = JSON.parse(user);
   const MAX_CHUNK_SIZE = 512;
-  
+
   const formatCurrency = (amount) => {
     return `Rp ${amount.toLocaleString("id-ID")}`;
   };
@@ -19,6 +21,32 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
   useEffect(() => {
     setShow(isOpen);
   }, [isOpen]);
+
+  // 🔥 Cek apakah Bluetooth tersedia di perangkat
+  useEffect(() => {
+    const checkBluetoothAvailability = async () => {
+      try {
+        const isAvailable = await navigator.bluetooth.getAvailability();
+        setIsBluetoothAvailable(isAvailable);
+        if (!isAvailable) {
+          setIsConnected(false);
+        }
+      } catch (error) {
+        console.error("Gagal mengecek Bluetooth:", error);
+      }
+    };
+
+    checkBluetoothAvailability();
+
+    // Pantau perubahan status Bluetooth
+    navigator.bluetooth.addEventListener("availabilitychanged", (event) => {
+      setIsBluetoothAvailable(event.value);
+      if (!event.value) {
+        setIsConnected(false);
+      }
+    });
+
+  }, []);
 
   // 🔥 Fungsi untuk connect ke printer (Manual)
   const connectToPrinter = async () => {
@@ -92,7 +120,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
     }
     const isMobile = window.matchMedia("(max-width: 1024px)").matches || "ontouchstart" in window || navigator.maxTouchPoints > 0
 
-    if (!isMobile){
+    if (!isMobile) {
 
     }
     let Bayar = parseFloat(transactionDetails?.uangMasuk);
@@ -356,9 +384,10 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
                 </button>
               ) : (
                 <button
-                  className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-md w-full flex items-center justify-center"
-                  onClick={connectToPrinter}
-                  disabled={loading}
+                  className={`px-4 py-2 rounded-md w-full flex items-center justify-center ${isBluetoothAvailable ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-500 cursor-not-allowed"
+                    }`}
+                  onClick={isBluetoothAvailable ? connectToPrinter : null}
+                  disabled={!isBluetoothAvailable || loading}
                 >
                   {loading ? <Loader2 className="animate-spin mr-2" /> : "Hubungkan Printer"}
                 </button>
