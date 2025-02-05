@@ -101,7 +101,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
       let receiptData;
       if (isMobile) {
         if (transactionDetails?.uangMasuk || transactionDetails?.uangMasuk != "" || transactionDetails?.uangKembalian != 0) {
-          let receiptData = `PENYETAN NOROYONO\n`;
+          receiptData = `PENYETAN NOROYONO\n`;
           receiptData += `Mojolaban Sukoharjo\n`;
           receiptData += `Samping Klinik Mbogo\n`;
           receiptData += `Telp: 0822-4141-1661\n`;
@@ -124,6 +124,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
           receiptData += `\n================================\n`;
           receiptData += `Total Items : ${transactionDetails?.items?.length}\n`;
           receiptData += `Total Bayar : ${formatCurrency(transactionDetails?.total)}\n`;
+          receiptData += `Bayar       : ${formatCurrency(Bayar)}\n`;
           receiptData += `Kembalian   : ${formatCurrency(transactionDetails?.uangKembalian)}\n`;
           receiptData += `\nTerima kasih telah berbelanja!\n`;
           receiptData += `================================\n\n\n\n`;
