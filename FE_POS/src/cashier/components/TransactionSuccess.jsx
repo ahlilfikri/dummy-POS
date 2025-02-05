@@ -44,6 +44,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
       setIsBluetoothAvailable(event.value);
       if (!event.value) {
         setIsConnected(false);
+        disconnectPrinter();
       }
     });
 
@@ -54,7 +55,6 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
     if (device) {
       try {
         device.gatt.disconnect();
-        setPrinter(null);
         console.warn("Printer berhasil terputus.");
       } catch (error) {
         console.warn("Printer sudah terputus atau tidak bisa diputuskan secara manual.");
@@ -108,7 +108,6 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
       selectedDevice.addEventListener("gattserverdisconnected", () => {
         console.warn("⚠ Printer terputus! Silakan hubungkan kembali.");
         disconnectPrinter();
-        setIsConnected(false);
       });
     } catch (error) {
       console.error("❌ Gagal setup printer:", error);
