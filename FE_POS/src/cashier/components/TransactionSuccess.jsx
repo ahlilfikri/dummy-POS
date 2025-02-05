@@ -30,6 +30,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
         setIsBluetoothAvailable(isAvailable);
         if (!isAvailable) {
           setIsConnected(false);
+          disconnectPrinter(); // Putuskan koneksi jika Bluetooth mati
         }
       } catch (error) {
         console.error("Gagal mengecek Bluetooth:", error);
@@ -47,6 +48,20 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
     });
 
   }, []);
+
+  // 🔥 Fungsi untuk disconnect jika Bluetooth mati
+  const disconnectPrinter = () => {
+    if (device) {
+      try {
+        device.gatt.disconnect();
+      } catch (error) {
+        console.warn("Printer sudah terputus atau tidak bisa diputuskan secara manual.");
+      }
+    }
+    setPrinter(null);
+    setDevice(null);
+    setIsConnected(false);
+  };
 
   // 🔥 Fungsi untuk connect ke printer (Manual)
   const connectToPrinter = async () => {
@@ -260,11 +275,16 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
       }
       alert(`✅ Struk berhasil dicetak!`);
       console.log("✅ Struk berhasil dicetak!");
+      selectedDevice.addEventListener("gattserverdisconnected", () => {
+        console.warn("⚠ Printer terputus! Silakan hubungkan kembali.");
+        disconnectPrinter();
+      });
     } catch (error) {
       console.error("❌ Gagal mencetak struk:", error);
       alert("Gagal mencetak struk! Coba periksa koneksi printer.");
       setIsConnected(false);
       setDevice(null);
+      disconnectPrinter();
     }
   };
 
