@@ -10,7 +10,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
   const [loading, setLoading] = useState(false);
   let user = localStorage.getItem("user");
   user = JSON.parse(user);
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
   console.log(isMobile ? "📱 Mobile/Tablet detected" : "🖥️ Desktop detected");
   const MAX_CHUNK_SIZE = 512;
   const formatCurrency = (amount) => {
@@ -103,58 +103,73 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
 
       if (isMobile) {
         if (transactionDetails?.uangMasuk || transactionDetails?.uangMasuk != "" || transactionDetails?.uangKembalian != 0) {
-          receiptData =
-            // `${ESC}\x40` + // Reset Printer
-            `PENYETAN NOROYONO\n` +
-            `Mojolaban Sukoharjo\n` +
-            `Samping Klinik Mbogo\n` +
-            `Telp: 0822-4141-1661\n` +
-            `${ESC}\x45\x01==============================${ESC}\x45\x00\n` +
-            `Tanggal : ${new Date().toLocaleDateString("id-ID")}\n` +
-            `Metode  : ${transactionDetails?.metodePembayaran}\n` +
-            `Detail  : ${transactionDetails?.detail}\n` +
-            `Kasir  : ${user?.nama}\n` +
-            `${ESC}\x45\x01==============================${ESC}\x45\x00\n` +
-            `ITEM PESANAN\n` +
-            `--------------------------------\n` +
-            transactionDetails?.items?.map((item) =>
-              `${item.nama}\n` +
-              `  ${String(item.quantity)} x ${formatCurrency(item?.harga)} = ${formatCurrency(item.quantity * item.harga)}`
-            ).join("\n") +
-            `\n${ESC}\x45\x01==============================${ESC}\x45\x00\n` +
-            `Total Items: ${transactionDetails?.items?.length}\n` +
-            `Total Bayar: ${formatCurrency(transactionDetails?.total)}\n` +
-            `Jumlah Pembayaran: ${formatCurrency(parseFloat(transactionDetails?.uangMasuk))}\n` +
-            `Uang Kemablian: ${formatCurrency(transactionDetails?.uangKembalian)}\n` +
-            `\nTerima kasih telah berbelanja!\n` +
-            `${ESC}\x45\x01==============================${ESC}\x45\x00\n\n`;
+          let receiptData = `PENYETAN NOROYONO\n`;
+          receiptData += `Mojolaban Sukoharjo\n`;
+          receiptData += `Samping Klinik Mbogo\n`;
+          receiptData += `Telp: 0822-4141-1661\n`;
+          receiptData += `================================\n`;
+          receiptData += `Tanggal : ${new Date().toLocaleDateString("id-ID")}\n`;
+          receiptData += `Metode  : ${transactionDetails?.metodePembayaran}\n`;
+          receiptData += `Detail  : ${transactionDetails?.detail}\n`;
+          receiptData += `Kasir   : ${user?.nama}\n`;
+          receiptData += `================================\n`;
+          receiptData += `ITEM PESANAN\n`;
+          receiptData += `--------------------------------\n`;
+
+          // 🔥 Format item supaya rapi dan tidak terpotong
+          transactionDetails?.items?.forEach((item) => {
+            let itemName = item.nama.padEnd(20, " "); // Pastikan nama tidak lebih dari 20 karakter
+            let quantity = String(item.quantity).padEnd(3, " ");
+            let price = formatCurrency(item?.harga).padStart(8, " ");
+            let total = formatCurrency(item.quantity * item.harga).padStart(8, " ");
+
+            receiptData += `${itemName}\n  ${quantity} x ${price} = ${total}\n`;
+          });
+
+          receiptData += `\n================================\n`;
+          receiptData += `Total Items : ${transactionDetails?.items?.length}\n`;
+          receiptData += `Total Bayar : ${formatCurrency(transactionDetails?.total)}\n`;
+
+          if (transactionDetails?.uangMasuk) {
+            receiptData += `Bayar       : ${formatCurrency(parseFloat(transactionDetails?.uangMasuk))}\n`;
+          }
+          if (transactionDetails?.uangKembalian) {
+            receiptData += `Kembalian   : ${formatCurrency(transactionDetails?.uangKembalian)}\n`;
+          }
+
+          receiptData += `\nTerima kasih telah berbelanja!\n`;
+          receiptData += `================================\n\n\n\n`;
         } else {
-          receiptData =
-            // `${ESC}\x40` + // Reset Printer
-            `PENYETAN NOROYONO\n` +
-            `Mojolaban Sukoharjo\n` +
-            `Samping Klinik Mbogo\n` +
-            `Telp: 0822-4141-1661\n` +
-            `${ESC}\x45\x01==============================${ESC}\x45\x00\n` +
-            `Tanggal : ${new Date().toLocaleDateString("id-ID")}\n` +
-            `Metode  : ${transactionDetails?.metodePembayaran}\n` +
-            `Detail  : ${transactionDetails?.detail}\n` +
-            `Kasir  : ${user?.nama}\n` +
-            `${ESC}\x45\x01==============================${ESC}\x45\x00\n` +
-            `ITEM PESANAN\n` +
-            `--------------------------------\n` +
-            transactionDetails?.items?.map((item) =>
-              `${item.nama}\n` +
-              `  ${String(item.quantity)} x ${formatCurrency(item?.harga)} = ${formatCurrency(item.quantity * item.harga)}`
-            ).join("\n") +
-            `\n${ESC}\x45\x01==============================${ESC}\x45\x00\n` +
-            `Total Items: ${transactionDetails?.items?.length}\n` +
-            `Total Bayar: ${formatCurrency(transactionDetails?.total)}\n` +
-            `\nTerima kasih telah berbelanja!\n` +
-            `${ESC}\x45\x01==============================${ESC}\x45\x00\n\n`;
+          receiptData = `PENYETAN NOROYONO\n`;
+          receiptData += `Mojolaban Sukoharjo\n`;
+          receiptData += `Samping Klinik Mbogo\n`;
+          receiptData += `Telp: 0822-4141-1661\n`;
+          receiptData += `================================\n`;
+          receiptData += `Tanggal : ${new Date().toLocaleDateString("id-ID")}\n`;
+          receiptData += `Metode  : ${transactionDetails?.metodePembayaran}\n`;
+          receiptData += `Detail  : ${transactionDetails?.detail}\n`;
+          receiptData += `Kasir   : ${user?.nama}\n`;
+          receiptData += `================================\n`;
+          receiptData += `ITEM PESANAN\n`;
+          receiptData += `--------------------------------\n`;
+
+          // 🔥 Format item supaya rapi dan tidak terpotong
+          transactionDetails?.items?.forEach((item) => {
+            let itemName = item.nama.padEnd(20, " "); // Pastikan nama tidak lebih dari 20 karakter
+            let quantity = String(item.quantity).padEnd(3, " ");
+            let price = formatCurrency(item?.harga).padStart(8, " ");
+            let total = formatCurrency(item.quantity * item.harga).padStart(8, " ");
+
+            receiptData += `${itemName}\n  ${quantity} x ${price} = ${total}\n`;
+          });
+
+          receiptData += `\n================================\n`;
+          receiptData += `Total Items : ${transactionDetails?.items?.length}\n`;
+          receiptData += `Total Bayar : ${formatCurrency(transactionDetails?.total)}\n`;
+          receiptData += `\nTerima kasih telah berbelanja!\n`;
+          receiptData += `================================\n\n\n\n`;
         }
       } else {
-
         if (transactionDetails?.uangMasuk || transactionDetails?.uangMasuk != "" || transactionDetails?.uangKembalian != 0) {
           receiptData =
             // `${ESC}\x40` + // Reset Printer
@@ -249,9 +264,14 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
     for (let i = 0; i < encodedData.length; i += MAX_CHUNK_SIZE) {
       const chunk = encodedData.slice(i, i + MAX_CHUNK_SIZE);
       await printer.writeValue(chunk);
-      await new Promise(resolve => setTimeout(resolve, 300)); // Delay antar chunk
+      await new Promise(resolve => setTimeout(resolve, 100)); // Kurangi delay untuk stabilitas
     }
+
+    // 🔥 Pastikan printer nge-feed kertas agar struk tidak terpotong
+    const FEED = new Uint8Array([0x0A, 0x0A, 0x0A, 0x0A]); // 4 baris kosong
+    await printer.writeValue(FEED);
   };
+
 
 
   if (!isOpen) return null;
