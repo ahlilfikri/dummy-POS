@@ -54,6 +54,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
     if (device) {
       try {
         device.gatt.disconnect();
+        setPrinter(null);
         console.warn("Printer berhasil terputus.");
       } catch (error) {
         console.warn("Printer sudah terputus atau tidak bisa diputuskan secara manual.");
