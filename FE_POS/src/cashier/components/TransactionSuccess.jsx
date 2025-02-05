@@ -101,6 +101,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
       // 🔥 Jika printer terputus, ubah status jadi tidak terhubung
       selectedDevice.addEventListener("gattserverdisconnected", () => {
         console.warn("⚠ Printer terputus! Silakan hubungkan kembali.");
+        disconnectPrinter();
         setIsConnected(false);
       });
     } catch (error) {
