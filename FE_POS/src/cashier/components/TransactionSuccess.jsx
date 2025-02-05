@@ -63,6 +63,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
     setPrinter(null);
     setDevice(null);
     setIsConnected(false);
+    setIsBluetoothAvailable(false);
   };
 
   // 🔥 Fungsi untuk connect ke printer (Manual)
@@ -99,6 +100,9 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
       setPrinter(characteristic);
       setIsConnected(true);
       setDevice(selectedDevice);
+
+      console.log();
+      
 
       // 🔥 Jika printer terputus, ubah status jadi tidak terhubung
       selectedDevice.addEventListener("gattserverdisconnected", () => {
