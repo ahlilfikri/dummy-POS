@@ -115,28 +115,19 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
           receiptData += `================================\n`;
           receiptData += `ITEM PESANAN\n`;
           receiptData += `--------------------------------\n`;
-
           // 🔥 Format item supaya rapi dan tidak terpotong
           transactionDetails?.items?.forEach((item) => {
             let itemName = item.nama.padEnd(20, " "); // Pastikan nama tidak lebih dari 20 karakter
             let quantity = String(item.quantity).padEnd(3, " ");
             let price = formatCurrency(item?.harga).padStart(8, " ");
             let total = formatCurrency(item.quantity * item.harga).padStart(8, " ");
-
             receiptData += `${itemName}\n  ${quantity} x ${price} = ${total}\n`;
           });
-
           receiptData += `\n================================\n`;
           receiptData += `Total Items : ${transactionDetails?.items?.length}\n`;
           receiptData += `Total Bayar : ${formatCurrency(transactionDetails?.total)}\n`;
-
-          if (transactionDetails?.uangMasuk) {
-            receiptData += `Bayar       : ${formatCurrency(parseFloat(transactionDetails?.uangMasuk))}\n`;
-          }
-          if (transactionDetails?.uangKembalian) {
-            receiptData += `Kembalian   : ${formatCurrency(transactionDetails?.uangKembalian)}\n`;
-          }
-
+          receiptData += `Bayar       : ${formatCurrency(parseFloat(transactionDetails?.uangMasuk))}\n`;
+          receiptData += `Kembalian   : ${formatCurrency(transactionDetails?.uangKembalian)}\n`;
           receiptData += `\nTerima kasih telah berbelanja!\n`;
           receiptData += `================================\n\n\n\n`;
         } else {
@@ -152,17 +143,13 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
           receiptData += `================================\n`;
           receiptData += `ITEM PESANAN\n`;
           receiptData += `--------------------------------\n`;
-
-
           transactionDetails?.items?.forEach((item) => {
             let itemName = item.nama.padEnd(20, " "); // Pastikan nama tidak lebih dari 20 karakter
             let quantity = String(item.quantity).padEnd(3, " ");
             let price = formatCurrency(item?.harga).padStart(8, " ");
             let total = formatCurrency(item.quantity * item.harga).padStart(8, " ");
-
             receiptData += `${itemName}\n  ${quantity} x ${price} = ${total}\n`;
           });
-
           receiptData += `\n================================\n`;
           receiptData += `Total Items : ${transactionDetails?.items?.length}\n`;
           receiptData += `Total Bayar : ${formatCurrency(transactionDetails?.total)}\n`;
@@ -261,17 +248,17 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
     const lines = data.split("\n"); // Pisahkan data per baris
 
     for (const line of lines) {
-        const asciiArray = line.split("").map(char => char.charCodeAt(0)); // Konversi ke ASCII
-        const encodedData = new Uint8Array([...asciiArray, 0x0A]); // Tambahkan newline (0x0A)
+      const asciiArray = line.split("").map(char => char.charCodeAt(0)); // Konversi ke ASCII
+      const encodedData = new Uint8Array([...asciiArray, 0x0A]); // Tambahkan newline (0x0A)
 
-        await printer.writeValue(encodedData); // Kirim ke printer
-        await new Promise(resolve => setTimeout(resolve, 200)); // Delay antar baris untuk stabilitas
+      await printer.writeValue(encodedData); // Kirim ke printer
+      await new Promise(resolve => setTimeout(resolve, 200)); // Delay antar baris untuk stabilitas
     }
 
     // 🔥 Pastikan printer nge-feed kertas agar struk tidak terpotong
     const FEED = new Uint8Array([0x0A, 0x0A, 0x0A, 0x0A]); // 4 baris kosong
     await printer.writeValue(FEED);
-};
+  };
 
   if (!isOpen) return null;
 
