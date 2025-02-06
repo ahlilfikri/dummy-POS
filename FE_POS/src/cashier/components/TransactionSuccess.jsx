@@ -6,7 +6,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
   const [show, setShow] = useState(isOpen);
   const [printer, setPrinter] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
-  // const [device, setDevice] = useState(null);
+  const [device, setDevice] = useState(null);
   const [loading, setLoading] = useState(false);
   // const [isBluetoothAvailable, setIsBluetoothAvailable] = useState(true); // State Bluetooth
   
@@ -24,33 +24,31 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
   }, [isOpen]);
 
   // 🔥 Cek apakah Bluetooth tersedia di perangkat
-  useEffect(() => {
-    const checkBluetoothAvailability = async () => {
-      try {
-        const isAvailable = await navigator.bluetooth.getAvailability();
+  // useEffect(() => {
+  //   const checkBluetoothAvailability = async () => {
+  //     try {
+  //       const isAvailable = await navigator.bluetooth.getAvailability();
         // setIsBluetoothAvailable(isAvailable);
-        if (!isAvailable) {
-          setIsConnected(false);
-          device.gatt.disconnect();
-          // disconnectPrinter(); // Putuskan koneksi jika Bluetooth mati
-        }
-      } catch (error) {
-        console.error("Gagal mengecek Bluetooth:", error);
-      }
-    };
+    //     if (!isAvailable) {
+    //       setIsConnected(false);
+    //       disconnectPrinter(); // Putuskan koneksi jika Bluetooth mati
+    //     }
+    //   } catch (error) {
+    //     console.error("Gagal mengecek Bluetooth:", error);
+    //   }
+    // };
 
-    checkBluetoothAvailability();
+    // checkBluetoothAvailability();
 
     // Pantau perubahan status Bluetooth
-    navigator.bluetooth.addEventListener("availabilitychanged", (event) => {
-      // setIsBluetoothAvailable(event.value);
-      if (!event.value) {
-        setIsConnected(false);
-        device.gatt.disconnect();
-        // disconnectPrinter();
-      }
-    });
-  }, [isConnected]);
+    // navigator.bluetooth.addEventListener("availabilitychanged", (event) => {
+    //   setIsBluetoothAvailable(event.value);
+    //   if (!event.value) {
+    //     setIsConnected(false);
+    //     disconnectPrinter();
+    //   }
+    // });
+  // }, []);
 
   // 🔥 Fungsi untuk disconnect jika Bluetooth mati
   // const disconnectPrinter = () => {
@@ -74,7 +72,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
     try {
       const selectedDevice = await navigator.bluetooth.requestDevice({
         acceptAllDevices: true,
-        optionalServices: ["000018f0-0000-1000-8000-00805f9b34fb"],
+        optionalServices: [],
       });
 
       const server = await selectedDevice.gatt.connect();
@@ -267,8 +265,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
       console.error("❌ Gagal mencetak struk:", error);
       alert("Gagal mencetak struk! Coba periksa koneksi printer.");
       setIsConnected(false);
-      // setDevice(null);
-      device.gatt.disconnect();
+      setDevice(null);
       // disconnectPrinter();
     }
   };
