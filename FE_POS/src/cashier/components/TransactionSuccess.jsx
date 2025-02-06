@@ -270,9 +270,11 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
         // alert(`✅ Open Cash Drawer!`);
         await openCashDrawer();
       }
+      setLoading(false);
       // alert(`✅ Struk berhasil dicetak!`);
       console.log("✅ Struk berhasil dicetak!");
     } catch (error) {
+      setLoading(false);
       console.error("❌ Gagal mencetak struk:", error);
       alert("Gagal mencetak struk! Coba periksa koneksi printer.");
       setIsConnected(false);

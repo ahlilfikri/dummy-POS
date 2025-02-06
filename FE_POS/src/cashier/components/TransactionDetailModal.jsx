@@ -197,14 +197,16 @@ const TransactionDetailModal = ({ isOpen, onClose, transaction }) => {
       //   await openCashDrawer();
       // }
       // alert(`✅ Struk berhasil dicetak!`);
+      setIsLoading(false);
       console.log("✅ Struk berhasil dicetak!");
     } catch (error) {
+      setIsLoading(false);
       console.error("❌ Gagal mencetak struk:", error);
       alert("Gagal mencetak struk! Coba periksa koneksi printer.");
       setIsConnected(false);
       window.location.reload()
     }finally{
-      setIsLoading(true);
+      setIsLoading(false);
     }
   };
 
