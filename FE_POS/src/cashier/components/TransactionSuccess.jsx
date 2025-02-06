@@ -396,8 +396,8 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
             {/* Tombol Cetak atau Hubungkan Printer */}
             <div className="mt-4">
               {isConnected ? (
-                <button className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-md w-full" onClick={printReceipt}>
-                  Cetak Struk
+                <button className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-md w-full" onClick={printReceipt} disabled={loading}>
+                  {loading ? <Loader2 className="animate-spin mr-2" /> : "Cetak Struk"}
                 </button>
               ) : (
                 <button

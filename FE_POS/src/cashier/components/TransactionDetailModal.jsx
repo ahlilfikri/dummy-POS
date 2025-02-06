@@ -234,6 +234,9 @@ const TransactionDetailModal = ({ isOpen, onClose, transaction }) => {
     await printer.writeValue(FEED);
   };
 
+  console.log(isLoading);
+  
+
   return (
     <div
       className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20 ${isOpen ? "block" : "hidden"}`}
@@ -276,13 +279,15 @@ const TransactionDetailModal = ({ isOpen, onClose, transaction }) => {
         {/* Tombol Cetak atau Hubungkan Printer */}
         <div className="w-full flex flex-col px-4 mb-5">
           {isConnected ? (
-            <button className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-md w-full mb-2" onClick={printReceipt}>
-              Cetak Struk
+            <button className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-md w-full mb-2" onClick={printReceipt}
+            disabled={isLoading}>
+              {isLoading ? <Loader2 className="animate-spin mx-auto" /> : "Cetak Struk"}
             </button>
           ) : (
             <button
               className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-md w-full mb-2"
               onClick={connectToPrinter}
+              disabled={isLoading}
             >
               {isLoading ? <Loader2 className="animate-spin mx-auto" /> : "Hubungkan Printer"}
             </button>
