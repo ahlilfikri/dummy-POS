@@ -6,9 +6,10 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
   const [show, setShow] = useState(isOpen);
   const [printer, setPrinter] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
-  const [device, setDevice] = useState(null);
+  // const [device, setDevice] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [isBluetoothAvailable, setIsBluetoothAvailable] = useState(true); // State Bluetooth
+  // const [isBluetoothAvailable, setIsBluetoothAvailable] = useState(true); // State Bluetooth
+  
 
   let user = localStorage.getItem("user");
   user = JSON.parse(user);
@@ -23,48 +24,47 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
   }, [isOpen]);
 
   // 🔥 Cek apakah Bluetooth tersedia di perangkat
-  useEffect(() => {
-    const checkBluetoothAvailability = async () => {
-      try {
-        const isAvailable = await navigator.bluetooth.getAvailability();
-        setIsBluetoothAvailable(isAvailable);
-        if (!isAvailable) {
-          setIsConnected(false);
-          disconnectPrinter(); // Putuskan koneksi jika Bluetooth mati
-        }
-      } catch (error) {
-        console.error("Gagal mengecek Bluetooth:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const checkBluetoothAvailability = async () => {
+  //     try {
+  //       const isAvailable = await navigator.bluetooth.getAvailability();
+        // setIsBluetoothAvailable(isAvailable);
+    //     if (!isAvailable) {
+    //       setIsConnected(false);
+    //       disconnectPrinter(); // Putuskan koneksi jika Bluetooth mati
+    //     }
+    //   } catch (error) {
+    //     console.error("Gagal mengecek Bluetooth:", error);
+    //   }
+    // };
 
-    checkBluetoothAvailability();
+    // checkBluetoothAvailability();
 
     // Pantau perubahan status Bluetooth
-    navigator.bluetooth.addEventListener("availabilitychanged", (event) => {
-      setIsBluetoothAvailable(event.value);
-      if (!event.value) {
-        setIsConnected(false);
-        disconnectPrinter();
-      }
-    });
-
-  }, []);
+    // navigator.bluetooth.addEventListener("availabilitychanged", (event) => {
+    //   setIsBluetoothAvailable(event.value);
+    //   if (!event.value) {
+    //     setIsConnected(false);
+    //     disconnectPrinter();
+    //   }
+    // });
+  // }, []);
 
   // 🔥 Fungsi untuk disconnect jika Bluetooth mati
-  const disconnectPrinter = () => {
-    if (device) {
-      try {
-        device.gatt.disconnect();
-        console.warn("Printer berhasil terputus.");
-      } catch (error) {
-        console.warn("Printer sudah terputus atau tidak bisa diputuskan secara manual.");
-      }
-    }
-    setPrinter(null);
-    setDevice(null);
-    setIsConnected(false);
-    setIsBluetoothAvailable(false);
-  };
+  // const disconnectPrinter = () => {
+  //   if (device) {
+  //     try {
+  //       device.gatt.disconnect();
+  //       console.warn("Printer berhasil terputus.");
+  //     } catch (error) {
+  //       console.warn("Printer sudah terputus atau tidak bisa diputuskan secara manual.");
+  //     }
+  //   }
+  //   setPrinter(null);
+  //   setDevice(null);
+  //   setIsConnected(false);
+  //   setIsBluetoothAvailable(false);
+  // };
 
   // 🔥 Fungsi untuk connect ke printer (Manual)
   const connectToPrinter = async () => {
@@ -75,44 +75,24 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
         optionalServices: ["000018f0-0000-1000-8000-00805f9b34fb"],
       });
 
-      setDevice(selectedDevice);
-      await setupPrinter(selectedDevice);
-    } catch (error) {
-      console.error("❌ Gagal menghubungkan ke printer:", error);
-      alert("Gagal menghubungkan ke printer!");
-      setIsConnected(false);
-    }
-    setLoading(false);
-  };
-
-
-  // 🔥 Setup printer setelah ditemukan
-  const setupPrinter = async (selectedDevice) => {
-    try {
-      if (!selectedDevice.gatt) {
-        throw new Error("Perangkat tidak mendukung GATT.");
-      }
-
       const server = await selectedDevice.gatt.connect();
       const service = await server.getPrimaryService("000018f0-0000-1000-8000-00805f9b34fb");
       const characteristic = await service.getCharacteristic("00002af1-0000-1000-8000-00805f9b34fb");
 
       setPrinter(characteristic);
       setIsConnected(true);
-      setDevice(selectedDevice);
 
-      console.log();
-      
-
-      // 🔥 Jika printer terputus, ubah status jadi tidak terhubung
       selectedDevice.addEventListener("gattserverdisconnected", () => {
         console.warn("⚠ Printer terputus! Silakan hubungkan kembali.");
-        disconnectPrinter();
+        setIsConnected(false);
       });
+
     } catch (error) {
-      console.error("❌ Gagal setup printer:", error);
-      alert("Gagal setup printer! Pastikan Bluetooth aktif dan printer menyala.");
+      console.error("❌ Gagal menghubungkan ke printer:", error);
+      alert("Gagal menghubungkan ke printer!");
       setIsConnected(false);
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -286,7 +266,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
       alert("Gagal mencetak struk! Coba periksa koneksi printer.");
       setIsConnected(false);
       setDevice(null);
-      disconnectPrinter();
+      // disconnectPrinter();
     }
   };
 
@@ -407,8 +387,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
                 </button>
               ) : (
                 <button
-                  className={`px-4 py-2 rounded-md w-full flex items-center justify-center ${(isBluetoothAvailable || !isBluetoothAvailable) ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-500 cursor-not-allowed"
-                    }`}
+                  className={`px-4 py-2 rounded-md w-full flex items-center justify-center bg-blue-500 hover:bg-blue-600`}
                   onClick={connectToPrinter}
                   disabled={loading}
                 >
