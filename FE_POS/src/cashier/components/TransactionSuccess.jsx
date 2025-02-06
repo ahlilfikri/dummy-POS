@@ -254,22 +254,22 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
       };
 
       console.log("🖨️ Mengirim teks struk ke printer...");
-      alert(`maxChunkSize: ${MAX_CHUNK_SIZE}`);
+      // alert(`maxChunkSize: ${MAX_CHUNK_SIZE}`);
       await new Promise(resolve => setTimeout(resolve, 1000));
       if (!isMobile) {
-        alert("masuk laptop")
+        // alert("masuk laptop")
         await writeToPrinterInChunks((new Uint8Array(logoData)), printer);
         await writeToPrinterInChunks((receiptData), printer);
       } else {
-        alert("masuk mobile")
+        // alert("masuk mobile")
         await writeToPrinterInChunksMobile((receiptData), printer);
       }
 
       if (transactionDetails?.uangMasuk || transactionDetails?.uangMasuk != "") {
-        alert(`✅ Open Cash Drawer!`);
+        // alert(`✅ Open Cash Drawer!`);
         await openCashDrawer();
       }
-      alert(`✅ Struk berhasil dicetak!`);
+      // alert(`✅ Struk berhasil dicetak!`);
       console.log("✅ Struk berhasil dicetak!");
     } catch (error) {
       console.error("❌ Gagal mencetak struk:", error);
