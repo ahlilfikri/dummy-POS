@@ -9,7 +9,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
   const [device, setDevice] = useState(null);
   const [loading, setLoading] = useState(false);
   // const [isBluetoothAvailable, setIsBluetoothAvailable] = useState(true); // State Bluetooth
-  
+
 
   let user = localStorage.getItem("user");
   user = JSON.parse(user);
@@ -28,26 +28,26 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
   //   const checkBluetoothAvailability = async () => {
   //     try {
   //       const isAvailable = await navigator.bluetooth.getAvailability();
-        // setIsBluetoothAvailable(isAvailable);
-    //     if (!isAvailable) {
-    //       setIsConnected(false);
-    //       disconnectPrinter(); // Putuskan koneksi jika Bluetooth mati
-    //     }
-    //   } catch (error) {
-    //     console.error("Gagal mengecek Bluetooth:", error);
-    //   }
-    // };
+  // setIsBluetoothAvailable(isAvailable);
+  //     if (!isAvailable) {
+  //       setIsConnected(false);
+  //       disconnectPrinter(); // Putuskan koneksi jika Bluetooth mati
+  //     }
+  //   } catch (error) {
+  //     console.error("Gagal mengecek Bluetooth:", error);
+  //   }
+  // };
 
-    // checkBluetoothAvailability();
+  // checkBluetoothAvailability();
 
-    // Pantau perubahan status Bluetooth
-    // navigator.bluetooth.addEventListener("availabilitychanged", (event) => {
-    //   setIsBluetoothAvailable(event.value);
-    //   if (!event.value) {
-    //     setIsConnected(false);
-    //     disconnectPrinter();
-    //   }
-    // });
+  // Pantau perubahan status Bluetooth
+  // navigator.bluetooth.addEventListener("availabilitychanged", (event) => {
+  //   setIsBluetoothAvailable(event.value);
+  //   if (!event.value) {
+  //     setIsConnected(false);
+  //     disconnectPrinter();
+  //   }
+  // });
   // }, []);
 
   // 🔥 Fungsi untuk disconnect jika Bluetooth mati
@@ -70,6 +70,19 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
   const connectToPrinter = async () => {
     setLoading(true);
     try {
+      if (device?.gatt?.connected) {
+        console.log("🔄 Memutuskan sesi GATT...");
+        device.gatt.disconnect();
+      }
+
+      console.log("⏳ Menunggu 3 detik sebelum reconnect...");
+      await new Promise(resolve => setTimeout(resolve, 3000));
+
+      console.log("✅ GATT session berhasil di-reset.");
+    } catch (error) {
+      console.error("❌ Gagal reset GATT session:", error);
+    }
+    try {
       const selectedDevice = await navigator.bluetooth.requestDevice({
         acceptAllDevices: true,
         optionalServices: [],
@@ -91,7 +104,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
       console.error("❌ Gagal menghubungkan ke printer:", error);
       alert("Gagal menghubungkan ke printer!");
       setIsConnected(false);
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -121,9 +134,6 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
     }
     const isMobile = window.matchMedia("(max-width: 1024px)").matches || "ontouchstart" in window || navigator.maxTouchPoints > 0
 
-    if (!isMobile) {
-
-    }
     let Bayar = parseFloat(transactionDetails?.uangMasuk);
     const ESC = "\x1B"; // ESC command
     const GS = "\x1D"; // GS command
