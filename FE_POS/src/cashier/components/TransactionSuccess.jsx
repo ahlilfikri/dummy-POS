@@ -24,31 +24,33 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
   }, [isOpen]);
 
   // 🔥 Cek apakah Bluetooth tersedia di perangkat
-  // useEffect(() => {
-  //   const checkBluetoothAvailability = async () => {
-  //     try {
-  //       const isAvailable = await navigator.bluetooth.getAvailability();
+  useEffect(() => {
+    const checkBluetoothAvailability = async () => {
+      try {
+        const isAvailable = await navigator.bluetooth.getAvailability();
         // setIsBluetoothAvailable(isAvailable);
-    //     if (!isAvailable) {
-    //       setIsConnected(false);
-    //       disconnectPrinter(); // Putuskan koneksi jika Bluetooth mati
-    //     }
-    //   } catch (error) {
-    //     console.error("Gagal mengecek Bluetooth:", error);
-    //   }
-    // };
+        if (!isAvailable) {
+          setIsConnected(false);
+          device.gatt.disconnect();
+          // disconnectPrinter(); // Putuskan koneksi jika Bluetooth mati
+        }
+      } catch (error) {
+        console.error("Gagal mengecek Bluetooth:", error);
+      }
+    };
 
-    // checkBluetoothAvailability();
+    checkBluetoothAvailability();
 
     // Pantau perubahan status Bluetooth
-    // navigator.bluetooth.addEventListener("availabilitychanged", (event) => {
-    //   setIsBluetoothAvailable(event.value);
-    //   if (!event.value) {
-    //     setIsConnected(false);
-    //     disconnectPrinter();
-    //   }
-    // });
-  // }, []);
+    navigator.bluetooth.addEventListener("availabilitychanged", (event) => {
+      // setIsBluetoothAvailable(event.value);
+      if (!event.value) {
+        setIsConnected(false);
+        device.gatt.disconnect();
+        // disconnectPrinter();
+      }
+    });
+  }, [isConnected]);
 
   // 🔥 Fungsi untuk disconnect jika Bluetooth mati
   // const disconnectPrinter = () => {
@@ -266,6 +268,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
       alert("Gagal mencetak struk! Coba periksa koneksi printer.");
       setIsConnected(false);
       setDevice(null);
+      device.gatt.disconnect();
       // disconnectPrinter();
     }
   };
