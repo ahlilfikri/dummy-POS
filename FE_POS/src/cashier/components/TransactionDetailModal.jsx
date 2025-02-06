@@ -201,6 +201,7 @@ const TransactionDetailModal = ({ isOpen, onClose, transaction }) => {
       console.error("❌ Gagal mencetak struk:", error);
       alert("Gagal mencetak struk! Coba periksa koneksi printer.");
       setIsConnected(false);
+      window.location.reload()
     }
   };
 

@@ -276,6 +276,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
       alert("Gagal mencetak struk! Coba periksa koneksi printer.");
       setIsConnected(false);
       setDevice(null);
+      window.location.reload();
       // disconnectPrinter();
     }
   };
