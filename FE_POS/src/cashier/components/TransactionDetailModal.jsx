@@ -35,7 +35,7 @@ const TransactionDetailModal = ({ isOpen, onClose, transaction }) => {
       console.error("❌ Gagal menghubungkan ke printer:", error);
       alert("Gagal menghubungkan ke printer!");
       setIsConnected(false);
-    }finally{
+    } finally {
       setIsLoading(false);
     }
   };
@@ -181,6 +181,10 @@ const TransactionDetailModal = ({ isOpen, onClose, transaction }) => {
 
       console.log("🖨️ Mengirim teks struk ke printer...");
       setIsLoading(true);
+      const timeoutId = setTimeout(() => {
+        console.warn("⏳ Timeout: Proses pencetakan lebih dari 5 detik, hentikan loading...");
+        setLoading(false);
+      }, 5000);
       // alert(`maxChunkSize: ${MAX_CHUNK_SIZE}`);
       await new Promise(resolve => setTimeout(resolve, 1000));
       if (!isMobile) {
@@ -205,7 +209,8 @@ const TransactionDetailModal = ({ isOpen, onClose, transaction }) => {
       alert("Gagal mencetak struk! Coba periksa koneksi printer.");
       setIsConnected(false);
       window.location.reload()
-    }finally{
+    } finally {
+      clearTimeout(timeoutId);
       setIsLoading(false);
     }
   };
@@ -237,7 +242,7 @@ const TransactionDetailModal = ({ isOpen, onClose, transaction }) => {
   };
 
   console.log(isLoading);
-  
+
 
   return (
     <div
@@ -282,7 +287,7 @@ const TransactionDetailModal = ({ isOpen, onClose, transaction }) => {
         <div className="w-full flex flex-col px-4 mb-5">
           {isConnected ? (
             <button className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-md w-full mb-2" onClick={printReceipt}
-            disabled={isLoading}>
+              disabled={isLoading}>
               {isLoading ? <Loader2 className="animate-spin mx-auto" /> : "Cetak Struk"}
             </button>
           ) : (

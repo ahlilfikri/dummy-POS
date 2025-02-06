@@ -257,6 +257,10 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
       // alert(`maxChunkSize: ${MAX_CHUNK_SIZE}`);
       await new Promise(resolve => setTimeout(resolve, 1000));
       setLoading(true);
+      const timeoutId = setTimeout(() => {
+        console.warn("⏳ Timeout: Proses pencetakan lebih dari 5 detik, hentikan loading...");
+        setLoading(false);
+      }, 5000);
       if (!isMobile) {
         // alert("masuk laptop")
         await writeToPrinterInChunks((new Uint8Array(logoData)), printer);
@@ -282,6 +286,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
       window.location.reload();
       // disconnectPrinter();
     }finally{
+      clearTimeout(timeoutId);
       setLoading(false);
     }
   };
