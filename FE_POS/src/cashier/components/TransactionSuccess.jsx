@@ -85,7 +85,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
     try {
       const selectedDevice = await navigator.bluetooth.requestDevice({
         acceptAllDevices: true,
-        optionalServices: [],
+        optionalServices: ["000018f0-0000-1000-8000-00805f9b34fb"],
       });
 
       const server = await selectedDevice.gatt.connect();
