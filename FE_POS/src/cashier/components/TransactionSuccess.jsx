@@ -256,6 +256,7 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
       console.log("🖨️ Mengirim teks struk ke printer...");
       // alert(`maxChunkSize: ${MAX_CHUNK_SIZE}`);
       await new Promise(resolve => setTimeout(resolve, 1000));
+      setLoading(true);
       if (!isMobile) {
         // alert("masuk laptop")
         await writeToPrinterInChunks((new Uint8Array(logoData)), printer);
@@ -278,9 +279,11 @@ const TransactionSuccessModal = ({ isOpen, onClose, transactionDetails }) => {
       setDevice(null);
       window.location.reload();
       // disconnectPrinter();
+    }finally{
+      setLoading(false);
     }
   };
-
+  
   // 🔥 Fungsi untuk mengirim data dalam chunks 512 byte
   const writeToPrinterInChunks = async (data, printer) => {
     const encodedData = data instanceof Uint8Array ? data : new TextEncoder().encode(data);

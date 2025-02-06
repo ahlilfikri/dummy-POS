@@ -180,6 +180,7 @@ const TransactionDetailModal = ({ isOpen, onClose, transaction }) => {
       };
 
       console.log("🖨️ Mengirim teks struk ke printer...");
+      setIsLoading(true);
       // alert(`maxChunkSize: ${MAX_CHUNK_SIZE}`);
       await new Promise(resolve => setTimeout(resolve, 1000));
       if (!isMobile) {
@@ -202,6 +203,8 @@ const TransactionDetailModal = ({ isOpen, onClose, transaction }) => {
       alert("Gagal mencetak struk! Coba periksa koneksi printer.");
       setIsConnected(false);
       window.location.reload()
+    }finally{
+      setIsLoading(true);
     }
   };
 
